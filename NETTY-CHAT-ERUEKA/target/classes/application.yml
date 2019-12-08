@@ -1,7 +1,0 @@
-spring:
-    application:
-        name: eureka
-    profiles:
-         #dev uat test pro
-         active: dev
-

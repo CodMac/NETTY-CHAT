@@ -1,9 +1,0 @@
-server:
-    #端口
-    port: 9030
-    context-path: /NETTY-CHAT-echoServer
-    
-eureka:
-    client:
-        serviceUrl:
-            defaultZone: http://127.0.0.1:8761/eureka/

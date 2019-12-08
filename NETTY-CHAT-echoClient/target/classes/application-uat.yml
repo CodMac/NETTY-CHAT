@@ -1,8 +1,0 @@
-server:
-    #端口
-    port: 8080
-    session:
-        #session过期期限
-        timeout: 1000 # in seconds
-    
-

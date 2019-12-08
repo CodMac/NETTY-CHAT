@@ -1,7 +1,0 @@
-spring:
-    application:
-        name: ChatRoom-client
-    profiles:
-         #dev uat test pro
-         active: dev,dao
-
