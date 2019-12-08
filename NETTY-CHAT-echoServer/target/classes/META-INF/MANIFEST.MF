@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: NETTY-CHAT-echoServer
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: mac
+Implementation-Vendor-Id: zqit
+Build-Jdk: 1.8.0_151
+Implementation-URL: http://maven.apache.org
+Created-By: Maven Integration for Eclipse
+

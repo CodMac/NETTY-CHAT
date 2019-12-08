@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NETTY-CHAT-androidClient</string>
+    <string name="title_nav_message">消息</string>
+    <string name="title_nav_book">通讯录</string>
+    <string name="title_nav_me">我</string>
+    <string name="title_activity_message_list">消息列表</string>
+</resources>

@@ -1,0 +1,8 @@
+spring:
+    application:
+        name: NETTY-CHAT-API-MESS
+    profiles:
+         #dao 为API-BASE的配置文档
+         #dev uat test pro
+         active: dao,dev
+
