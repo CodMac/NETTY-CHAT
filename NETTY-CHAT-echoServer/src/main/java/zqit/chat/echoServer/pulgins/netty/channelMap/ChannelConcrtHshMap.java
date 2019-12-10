@@ -36,5 +36,14 @@ public class ChannelConcrtHshMap implements ChannelCache<String, Channel> {
 		return 0;
 	}
 
+	@Override
+	public boolean isOnline(String key) {
+		Channel channel = channelCacheMap.get(key);
+		if(channel == null){
+			return false;
+		}
+		return true;
+	}
+
 	
 }

@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>NETTY-CHAT-echoServer</artifactId>
-	<name>NETTY-CHAT-echoServer</name>
+	<artifactId>NETTY-CHAT-MQ-LISTENER</artifactId>
+	<name>NETTY-CHAT-MQ-LISTENER</name>
 	<url>http://maven.apache.org</url>
 
 	<parent>
@@ -20,28 +20,13 @@
 
 	<dependencies>
 
-		<!--netty start -->
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>4.1.25.Final</version><!--$NO-MVN-MAN-VER$ -->
-		</dependency>
-		<!--netty end -->
-		
-		<!-- redis start -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
-		<!-- redis end -->
-		
 		<!--eureka start -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>
 		<!--eureka end -->
-		
+
 		<!-- NETTY-CHAT start -->
 		<dependency>
 			<groupId>zqit</groupId>
@@ -49,13 +34,18 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- NETTY-CHAT end -->
-		
+
 		<!-- activemq start -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-activemq</artifactId>
 		</dependency>
 		<!-- activemq end -->
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 
 	</dependencies>
 </project>

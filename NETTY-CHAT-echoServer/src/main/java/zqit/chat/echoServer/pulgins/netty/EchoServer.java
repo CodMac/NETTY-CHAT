@@ -38,6 +38,8 @@ public class EchoServer {
 	
 	@Autowired
 	LoginInHandler loginInHandler;
+	@Autowired
+	ChatMsgInHandler chatMsgInHandler;
 	
 	/**
 	 * NioEventLoop并不是一个纯粹的I/O线程，它除了负责I/O的读写之外 创建了两个NioEventLoopGroup，
@@ -78,7 +80,7 @@ public class EchoServer {
 				CheckpointInHandler checkpointInHandler = new CheckpointInHandler();
 				socketChannel.pipeline().addLast(checkpointInHandler);
 				socketChannel.pipeline().addLast(loginInHandler);
-				socketChannel.pipeline().addLast(new ChatMsgInHandler());
+				socketChannel.pipeline().addLast(chatMsgInHandler);
 				
 			}
 		});

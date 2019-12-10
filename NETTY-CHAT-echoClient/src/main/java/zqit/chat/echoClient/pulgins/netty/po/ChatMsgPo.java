@@ -1,4 +1,4 @@
-package zqit.chat.echoServer.pulgins.netty.po;
+package zqit.chat.echoClient.pulgins.netty.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

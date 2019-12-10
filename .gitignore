@@ -27,3 +27,4 @@ NETTY-CHAT-ERUEKA/.*
 NETTY-CHAT-echoServer/target/**
 NETTY-CHAT-echoServer/.setting/**
 NETTY-CHAT-echoServer/.*
+/bin/

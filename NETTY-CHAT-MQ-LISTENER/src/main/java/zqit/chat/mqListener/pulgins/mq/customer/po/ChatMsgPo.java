@@ -1,4 +1,4 @@
-package zqit.chat.echoServer.pulgins.netty.po;
+package zqit.chat.mqListener.pulgins.mq.customer.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class ChatMsgPo {
 	/**
 	 * 消息类型 1-文本 2-图片 3-语音 4-视频 5-文件 6-链接 7-表情包
 	 */
-	private Integer messType;
+	private String messType;
 	/**
 	 * 文本内容
 	 */

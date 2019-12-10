@@ -8,9 +8,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 
 import io.netty.channel.ChannelFuture;
 import zqit.chat.echoServer.pulgins.netty.EchoServer;
+
+@PropertySource(value = "classpath:zqit/chat/echoServer/pulgins/mq/activeMq.properties", encoding = "utf-8")
 
 @ComponentScan(value="zqit.chat")
 @EnableEurekaClient
