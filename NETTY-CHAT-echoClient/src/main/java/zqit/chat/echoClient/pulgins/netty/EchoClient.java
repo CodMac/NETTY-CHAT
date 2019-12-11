@@ -1,6 +1,7 @@
 package zqit.chat.echoClient.pulgins.netty;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import zqit.chat.echoClient.pulgins.netty.handler.EchoClientHandler;
 import zqit.chat.echoClient.pulgins.netty.protocol.nettyChatProtocol.decode.NettyChatDecoder;
 import zqit.chat.echoClient.pulgins.netty.protocol.nettyChatProtocol.encode.NettyChatEncoder;
@@ -48,9 +50,12 @@ public class EchoClient {
 					@Override
 					protected void initChannel(SocketChannel socketChannel) throws Exception {
 						
+						//5秒未读到消息, Handler触发userEventTriggered事件
+						socketChannel.pipeline().addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
+						//编解码
 						socketChannel.pipeline().addLast(new NettyChatDecoder());
 						socketChannel.pipeline().addLast(new NettyChatEncoder());
-						
+						//In
 						socketChannel.pipeline().addLast(new EchoClientHandler());
 					}
 				});

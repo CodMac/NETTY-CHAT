@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.timeout.IdleStateEvent;
+import zqit.chat.echoClient.pulgins.netty.protocol.nettyChatProtocol.NettyChatMsgModule;
 import zqit.chat.echoClient.pulgins.netty.protocol.nettyChatProtocol.NettyChatPtcol;
 
 /**
@@ -39,6 +41,27 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<NettyChatPtco
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     	
+    }
+    
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+		IdleStateEvent stateEvent = (IdleStateEvent) evt;
+		
+		switch (stateEvent.state()) {
+        case READER_IDLE:
+        	//发送心跳ping
+    		NettyChatPtcol pongMsg = new NettyChatPtcol();
+    		pongMsg.setMsgModule(NettyChatMsgModule.heart.getModuleIndex());
+    		pongMsg.setBody("ping");
+    		ctx.writeAndFlush(pongMsg);
+            break;
+        case WRITER_IDLE:
+            break;
+        case ALL_IDLE:
+            break;  
+        default:
+            break;
+        }
     }
     
     /**

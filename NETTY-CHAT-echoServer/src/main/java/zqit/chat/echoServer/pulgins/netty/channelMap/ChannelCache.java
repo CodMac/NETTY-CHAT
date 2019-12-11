@@ -36,4 +36,11 @@ public interface ChannelCache<K, T> {
 	 */
 	public boolean isOnline(K key);
 	
+	/**
+	 * 根据key移除Channel
+	 * @param key
+	 * @return
+	 */
+	public boolean remove(K key);
+	
 }

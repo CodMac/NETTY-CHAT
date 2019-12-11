@@ -2,6 +2,7 @@ package zqit.chat.echoServer.pulgins.netty.channelMap;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import io.netty.channel.Channel;
@@ -32,8 +33,7 @@ public class ChannelConcrtHshMap implements ChannelCache<String, Channel> {
 
 	@Override
 	public int count() {
-		// TODO Auto-generated method stub
-		return 0;
+		return channelCacheMap.size();
 	}
 
 	@Override
@@ -41,6 +41,14 @@ public class ChannelConcrtHshMap implements ChannelCache<String, Channel> {
 		Channel channel = channelCacheMap.get(key);
 		if(channel == null){
 			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean remove(String key) {
+		if(!StringUtils.isEmpty(key)){
+			channelCacheMap.remove(key);
 		}
 		return true;
 	}

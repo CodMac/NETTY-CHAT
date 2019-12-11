@@ -76,6 +76,21 @@ public class TestAController {
 		return token;
 	}
 	
+	@ResponseBody
+	@PostMapping("/disConnect")
+	public String disConnect() throws JsonProcessingException{
+        echoClient.channel.disconnect();
+        echoClient.channel.close();
+		
+		return "disConnect";
+	}
 	
+	@ResponseBody
+	@PostMapping("/isActive")
+	public boolean isActive() throws JsonProcessingException{
+        boolean active = echoClient.channel.isActive();
+		
+		return active;
+	}
 	
 }

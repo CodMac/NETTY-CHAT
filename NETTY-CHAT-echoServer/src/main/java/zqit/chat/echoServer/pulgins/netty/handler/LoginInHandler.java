@@ -4,6 +4,7 @@ import java.net.SocketAddress;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class LoginInHandler extends ChannelInboundHandlerAdapter{
 		LOGGER.debug("server-LoginInHandler-登录处理器=channelRead: 收到登录请求! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
 		
 		if(msgModule != NettyChatMsgModule.login.getModuleIndex()){
-			LOGGER.debug("server-LoginInHandler-登录处理器=channelRead: 消息类型出错, 非登录请求, 通道关闭! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
+			LOGGER.error("server-LoginInHandler-登录处理器=channelRead: 消息类型出错, 非登录请求, 通道关闭! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
 			destoryCtx(ctx);
 			return;
 		}
@@ -75,7 +76,7 @@ public class LoginInHandler extends ChannelInboundHandlerAdapter{
 		usrCriteria.andEqualTo("phone", phone);
 		List<User> usrList = UserMapper.selectByExample(example);
 		if(CollectionUtils.isEmpty(usrList)){
-			LOGGER.debug("server-LoginInHandler-登录处理器=channelRead: 账号无法关联到用户, 请确定账号存在, 通道关闭! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
+			LOGGER.error("server-LoginInHandler-登录处理器=channelRead: 账号无法关联到用户, 请确定账号存在, 通道关闭! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
 			destoryCtx(ctx);
 			return;
 		}
@@ -84,36 +85,48 @@ public class LoginInHandler extends ChannelInboundHandlerAdapter{
 		//3. 校验token有效性
 		boolean verify = JWTUtil.verify(token, uuid);
 		if(verify != true){
-			LOGGER.debug("server-LoginInHandler-登录处理器=channelRead: token无效, 通道关闭! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
+			LOGGER.error("server-LoginInHandler-登录处理器=channelRead: token无效, 通道关闭! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
 			destoryCtx(ctx);
 			return;
 		}
 		
 		/**
 		 * 登录成功
-		 * 1. channel通道设置已登录attr
+		 * 1. channel通道设置已登录attr + 当前通道的uuid
 		 * 2. 将channel通道信息保存
 		 * 3. pipeline移除当前Handler
 		 */
-		//1. channel通道设置已登录attr
+		//1. channel通道设置已登录attr + 当前通道的uuid
 		AttributeKey<Boolean> isLoginKey = AttributeKey.valueOf("isLogin");
 		Attribute<Boolean> isLoginAttr = channel.attr(isLoginKey);
 		isLoginAttr.set(true);
+		AttributeKey<String> uuidKey = AttributeKey.valueOf("uuid");
+		Attribute<String> uuidAttr = channel.attr(uuidKey);
+		uuidAttr.set(uuid);
 		//2. 将channel通道信息保存
 		channelCache.set(uuid, channel);
 		//3. pipeline移除当前Handler
 		ChannelPipeline pipeline = channel.pipeline();
 		pipeline.remove(this);
 		
-		LOGGER.debug("server-LoginInHandler-登录处理器=channelRead: 登录成功! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
+		LOGGER.info("server-LoginInHandler-登录处理器=channelRead: 登录成功! 来源client("+remoteAddress.toString()+"), 内容("+nettyChatMsg.toString()+")");
 		
 	}
 	
 	//关闭通道
 	private void destoryCtx(ChannelHandlerContext ctx){
 		Channel channel = ctx.channel();
+		//channelCache移除通道
+		AttributeKey<String> uuidKey = AttributeKey.valueOf("uuid");
+		Attribute<String> uuidAttr = channel.attr(uuidKey);
+		String uuid = uuidAttr.get();
+		if(!StringUtils.isEmpty(uuid)){
+			channelCache.remove(uuid);
+		}
+		//关闭通道
 		ctx.close();
 		channel.disconnect();
+		channel.close();
 	}
 	
 	

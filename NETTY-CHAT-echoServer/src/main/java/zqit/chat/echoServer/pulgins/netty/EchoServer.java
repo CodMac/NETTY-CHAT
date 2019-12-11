@@ -1,5 +1,7 @@
 package zqit.chat.echoServer.pulgins.netty;
 
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import zqit.chat.echoServer.pulgins.netty.handler.ChatMsgInHandler;
@@ -40,6 +43,8 @@ public class EchoServer {
 	LoginInHandler loginInHandler;
 	@Autowired
 	ChatMsgInHandler chatMsgInHandler;
+	@Autowired
+	CheckpointInHandler checkpointInHandler;
 	
 	/**
 	 * NioEventLoop并不是一个纯粹的I/O线程，它除了负责I/O的读写之外 创建了两个NioEventLoopGroup，
@@ -72,12 +77,14 @@ public class EchoServer {
 				Attribute<Boolean> isLoginAttr = socketChannel.attr(isLoginKey);
 				isLoginAttr.set(false);
 				
+				//5秒未接收到消息, Handler触发userEventTriggered事件
+				socketChannel.pipeline().addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
+				
 				//编解码
 				socketChannel.pipeline().addLast(new NettyChatDecoder());
 				socketChannel.pipeline().addLast(new NettyChatEncoder());
 				
 				//In-Handler
-				CheckpointInHandler checkpointInHandler = new CheckpointInHandler();
 				socketChannel.pipeline().addLast(checkpointInHandler);
 				socketChannel.pipeline().addLast(loginInHandler);
 				socketChannel.pipeline().addLast(chatMsgInHandler);
